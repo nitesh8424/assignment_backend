@@ -32,7 +32,8 @@ app.post('/api/create-admin', async (req, res) => {
         const { username, password } = req.body;
         const adminCreate = await AdminProfile.create({
             username,
-            password
+            password,
+            role
         });
         return res.json({ success: true, message: 'admin account successfully created', data: adminCreate });
     } catch (error) {
