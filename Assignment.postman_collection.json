@@ -1,0 +1,164 @@
+{
+	"info": {
+		"_postman_id": "73c52d32-ac38-48a9-ac9b-95a94c68bb99",
+		"name": "Assignment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "24704549"
+	},
+	"item": [
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "create-user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"Admin@123\",\n    \"mobile\": 71273913163,\n    \"email\": \"nadad2h@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/admin/create-user"
+					},
+					"response": []
+				},
+				{
+					"name": "edit-user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin@123\",\n    \"mobile\": 2132323733,\n    \"email\": \"njashdh@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/admin/edit-user"
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin1\",\n    \"password\": \"Admin@123\",\n    \"role\" : \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/create-admin"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "create-group",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"groupName\" : \"butesg\",\n    \"username\" : \"Acky\",\n    \"members\" : {\n        \"username\": \"abc123\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/user/create-group"
+					},
+					"response": []
+				},
+				{
+					"name": "edit-group",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"groupName\" : \"Nitesh Group\",\n    \"message\" : \"Hello, Nitesh\",\n    \"username\": \"abc123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/user/send-message"
+					},
+					"response": []
+				},
+				{
+					"name": "fetch-groups",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/api/user/fetch-groups?username=acky",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"user",
+								"fetch-groups"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "acky"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"admin1\",\n    \"password\": \"Admin@123\",\n    \"role\": \"admin\" //optional role for normal user\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:4000/api/login/"
+			},
+			"response": []
+		},
+		{
+			"name": "fetch-users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:4000/api/fetch-all-users"
+			},
+			"response": []
+		}
+	]
+}
