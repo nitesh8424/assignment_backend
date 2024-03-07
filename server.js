@@ -29,7 +29,7 @@ require('./src/db/dbConnection');
 
 app.post('/api/create-admin', async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { username, password, role } = req.body;
         const adminCreate = await AdminProfile.create({
             username,
             password,
