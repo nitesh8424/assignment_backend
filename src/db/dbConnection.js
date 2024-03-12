@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 
-const MONGO_URI = 'mongodb://localhost:27017';
+const MONGO_URI = 'mongodb+srv://nitesh:Richmond_109@cluster0.uttybej.mongodb.net/assignment';
 
 mongoose.connect(MONGO_URI, {
     useNewUrlParser: true,

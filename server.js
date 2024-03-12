@@ -8,6 +8,9 @@ const http = require('http');
 const { Server } = require('socket.io');
 const app = express();
 const cors = require('cors'); // Import the cors middleware
+const { validate, createAdminValidation } = require('./src/middleware/validation');
+const jwt = require('jsonwebtoken');
+const { validateToken } = require('./src/middleware/validateToken');
 
 app.use(cors());
 
@@ -27,15 +30,20 @@ app.use('/api/user', userRoutes);
 
 require('./src/db/dbConnection');
 
-app.post('/api/create-admin', async (req, res) => {
+app.post('/api/create-admin', validate(createAdminValidation), async (req, res) => {
     try {
         const { username, password, role } = req.body;
-        const adminCreate = await AdminProfile.create({
+        const findUsername = await AdminProfile.find({username,role});
+        if (findUsername.length > 0) {
+          return res.status(409).json({ success: false, data: "username is already in use" });
+        }else{
+          const adminCreate = await AdminProfile.create({
             username,
             password,
             role
-        });
-        return res.json({ success: true, message: 'admin account successfully created', data: adminCreate });
+          });
+          return res.status(200).json({ success: true, message: 'admin account successfully created', data: adminCreate });
+        }
     } catch (error) {
         // console.error('Error creating admin:', error);
         return res.status(error.status || 500).json({ success: false, message: 'admin account not created', error: error });
@@ -43,30 +51,31 @@ app.post('/api/create-admin', async (req, res) => {
 })
 
 app.post('/api/login', async (req, res) => {
-    try {
-        const { username, password, role } = req.body;
-
-        let user;
-        if(role==='admin'){
+  try {
+      const { username, password, role } = req.body;
+      let user;
+      if (role === 'admin') {
           user = await AdminProfile.findOne({ username });
-        } else{
+      } else {
           user = await User.findOne({ username });
-        }
+      }
 
-        if (user) {
-            if (user.password === password) {
-                return res.json({ success: true, data: { username,role } });
-            } else {
-                return res.status(401).json({ success: false, message: 'You have entered an invalid password' });
-            }
-        } else {
-            return res.status(404).json({ success: false, message: 'Please check username and Password' });
-        }
-    } catch (error) {
-        console.error('Error during login:', error);
-        return res.status(500).json({ success: false, message: 'Internal server error', error: error });
-    }
-})
+      if (user) {
+          if (user.password === password) {
+              const token = jwt.sign({ username: user.username, role: user.role }, 'ABCDEF', { expiresIn: '1h' });
+              return res.json({ success: true, token, data:{username,role} });
+          } else {
+              return res.status(401).json({ success: false, message: 'You have entered an invalid password' });
+          }
+      } else {
+          return res.status(404).json({ success: false, message: 'Please check username and Password' });
+      }
+  } catch (error) {
+      console.error('Error during login:', error);
+      return res.status(500).json({ success: false, message: 'Internal server error', error: error });
+  }
+});
+
 
 app.get('/api/fetch-all-users', async (req, res) => {
     try {
@@ -77,6 +86,10 @@ app.get('/api/fetch-all-users', async (req, res) => {
         return res.status(error.status || 500).json({ success: false, message: 'not found any user', error: error });
     }
 })
+
+app.post('/api/validate-token', validateToken, (req, res) => {
+  res.status(200).json({ success: true, message: 'Token is valid', user: req.user });
+});
 
 io.on('connection', async (socket) => {
     try {

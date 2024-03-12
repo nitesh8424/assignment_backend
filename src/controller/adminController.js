@@ -3,22 +3,30 @@ const adminService = require('../services/adminServices');
 
 async function createUser(req, res) {
     try {
-        // console.log('req.body', req.body)
         const create_user = await adminService.createUser(req.body); 
-        return res.json({success : true, message: 'user successfully created', data : create_user});
+        if (create_user?.status === 409) {
+            delete create_user?.status;
+            return res.status(409).json({ success: false, data: create_user });
+        } else {
+            return res.status(200).json({ success: true, message: 'User successfully created', data: create_user });
+        }
     } catch (error) {
-        // console.error("Error creating user:", error);
-        return res.status(error.status || 500).json({success : false, message: 'user not created', error : error});
+        return res.status(error.status || 500).json({ success: false, message: 'User not created', error: error });
     }
 }
+
 
 async function editUser(req, res) {
     try {
         const edit_user = await adminService.editUser(req.body); 
-        return res.json({success : true, message: 'user successfully updated', data : edit_user});
+        if(edit_user.status === 404){
+            return res.status(404).json({success : false, data : edit_user.message});
+        }else{
+            return res.json({success : true, message: 'user successfully updated', data : edit_user});
+        }
     } catch (error) {
         // console.error("Error creating user:", error);
-        return res.status(error.status || 500).json({success : false, message: 'user not edit', error : error});
+        return res.status(error.status || 500).json({success : false, message: 'user not edit', error : error||error.message});
     }
 }
 

@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const adminController = require('../controller/adminController')
+const adminController = require('../controller/adminController');
+const { createUserValidation, validate } = require("../middleware/validation");
 
-router.post('/create-user', adminController.createUser);
+router.post('/create-user', validate(createUserValidation), adminController.createUser);
 
-router.post('/edit-user', adminController.editUser);
+router.post('/edit-user', validate(createUserValidation), adminController.editUser);
 
 router.delete('/delete-user', adminController.deleteUser);
 
