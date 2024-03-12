@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
+    "mocha": "^10.3.0",
     "supertest": "^6.3.4"
   },
   "jest": {

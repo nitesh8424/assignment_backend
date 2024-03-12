@@ -4,6 +4,10 @@ const User = require("../schema/profileSchema");
 async function createGroup(data) {
     try {
         const { groupName, username, members } = data;
+        let fetchGroupName = await Groups.find({ groupName })
+        if(fetchGroupName.length > 0){
+            return { status: 409, message: "groupName is already in use." }; 
+        }
         const result = await Groups.create({
             members,
             group_admin: username,

@@ -2,8 +2,13 @@ const userService = require('../services/userServices');
 
 async function createGroup (req,res){
     try {
-        const create_user = await userService.createGroup(req.body); 
-        return res.json({success : true, message: 'user successfully created', data : create_user});
+        const create_group = await userService.createGroup(req.body); 
+        if (create_group?.status === 409) {
+            delete create_group?.status;
+            return res.status(409).json({ success: false, data: create_group });
+        } else {
+            return res.status(200).json({ success: true, message: 'group successfully created', data: create_group });
+        }
     } catch (error) {
         // console.error("Error creating user:", error);
         return res.status(error.status || 500).json({success : false, message: 'user not created', error : error});
