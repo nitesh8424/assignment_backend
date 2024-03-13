@@ -100,8 +100,10 @@ async function deleteGroup(data) {
         const result = await Groups.findOneAndDelete({
             groupName, group_admin: username
         })
+        if(result){
+            return result;
+        }
         // console.log('result', result)
-        return result;
     } catch (error) {
         throw error
     }
